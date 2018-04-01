@@ -1,0 +1,56 @@
+@charset "UTF-8";
+/* CSS Document */
+
+.flex-container {
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-flow: row wrap;
+	flex-flow: row wrap;
+	text-align: center;
+}
+
+.flex-container > * {
+	padding: 5px;
+	-webkit-flex: 1 100%;
+	flex: 1 100%;
+}
+
+.article {
+    text-align: left;
+}
+
+.article h2 {
+	line-height: 35%;
+	font: 200%;
+}
+
+.article ul {
+	font: 175%;
+}
+
+header {background: #042a52;color:white;}
+footer {background: #042a52;color:white;}
+.nav {background:#eee;}
+
+.nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+.nav ul a {
+    text-decoration: none;
+}
+
+@media all and (min-width: 768px) {
+    .nav {text-align:center;-webkit-flex: 1 1;flex:1 1;-webkit-order:2;order:2;}
+    .article {-webkit-flex:5 0px;flex:5 0px;-webkit-order:1;order:1;}
+    footer {-webkit-order:3;order:3;}
+}
+.flex-container .article ul li {
+	font-family: Cambria, Hoefler Text, Liberation Serif, Times, Times New Roman, serif;
+}
+h2 {
+	font-family: Cambria, Hoefler Text, Liberation Serif, Times, Times New Roman, serif;
+}
+h2 {
+	font-family: Cambria, Hoefler Text, Liberation Serif, Times, Times New Roman, serif;
+}
