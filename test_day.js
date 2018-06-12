@@ -3,8 +3,8 @@
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 var radius = canvas.height / 2;
-var end_hour = 1.5;   // time exam ends
-var end_minute = 30; //minute exam ends
+var end_hour = 19;     // hour exam ends
+var end_minutes = 30;   // minute exam ends
 
 ctx.translate(radius, radius);
 radius = radius * 0.90;
@@ -70,8 +70,8 @@ function drawTime(ctx, radius){
 	
     hour=hour%12;
     hour=(hour*Math.PI/6)+
-    (minute*Math.PI/(6*60))+
-    (second*Math.PI/(360*60));
+         (minute*Math.PI/(6*60))+
+         (second*Math.PI/(360*60));
     drawHand(ctx, hour, radius*0.5, radius*0.07);
     //minute
     minute=(minute*Math.PI/30)+(second*Math.PI/(30*60));
@@ -99,20 +99,35 @@ function drawHand(ctx, pos, length, width) {
 function drawIndicators(ctx, radius, end_hour) {
     var now = new Date();
 	var hour = now.getHours();
+	var minutes = now.getMinutes();
+	// calculate the number of minutes remaining in test
+	var minutes_remaining = ((end_hour - hour) * 60) + (end_minutes - minutes);
+	// calculate the span of each arc
+	var ending_time_ratio = end_minutes / 60;
+	var ending_arc_position = Math.PI * (-0.5 + 2 * end_minutes / 60);
+	var red_arc_start = ending_arc_position - (2*Math.PI)*(5/60);
+	var yellow_arc_start = ending_arc_position - (2*Math.PI)*(15/60);
+	var aqua_arc_start = Math.PI;
+	
 	
 	// still have the whole hour
-	if (end_hour - hour === 2) {
+	if (minutes_remaining < 0) {
+		ctx.beginPath();
+	    ctx.arc(0, 0, radius, 0, 2*Math.PI);
+	    ctx.fillStyle = 'blue';
+	    ctx.fill();
+	} else if (minutes_remaining > 60) {
 		ctx.save();
 		ctx.beginPath();
 	    ctx.arc(0, 0, radius, 0, 2*Math.PI);
 	    ctx.fillStyle = 'green';
 	    ctx.fill();
 		ctx.restore();
-	} else if (end_hour - hour === 1) {
+	} else if (minutes_remaining <= 60) {
 		ctx.save();
 		ctx.beginPath();
 		ctx.moveTo(0,0);
-	    ctx.arc(0, 0, radius, -Math.PI/2, Math.PI, false);
+	    ctx.arc(0, 0, radius, ending_arc_position, ending_arc_position + 3*Math.PI/2, false);
 		ctx.closePath();
 	    ctx.fillStyle = '#88d8b0';
 	    ctx.fill();
@@ -121,7 +136,7 @@ function drawIndicators(ctx, radius, end_hour) {
 		ctx.save();
 		ctx.beginPath();
 		ctx.moveTo(0,0);
-	    ctx.arc(0, 0, radius, -Math.PI/2, Math.PI, true);
+	    ctx.arc(0, 0, radius, ending_arc_position, yellow_arc_start, true);
 		ctx.closePath();
 	    ctx.fillStyle = '#ffcc5c';
 	    ctx.fill();
@@ -130,16 +145,11 @@ function drawIndicators(ctx, radius, end_hour) {
 		ctx.save();
 		ctx.beginPath();
 		ctx.moveTo(0,0);
-	    ctx.arc(0, 0, radius, -Math.PI/2, -2*Math.PI/3, true);
+	    ctx.arc(0, 0, radius, ending_arc_position, red_arc_start, true);
 		ctx.closePath();
 	    ctx.fillStyle = '#ff6f69';
 	    ctx.fill();
 		ctx.restore();
-	} else {
-		ctx.beginPath();
-	    ctx.arc(0, 0, radius, 0, 2*Math.PI);
-	    ctx.fillStyle = 'blue';
-	    ctx.fill();
 	}
 	
 
